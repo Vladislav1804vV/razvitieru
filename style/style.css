@@ -5378,3 +5378,11 @@ img {
     margin-bottom: 24px;
   }
 }
+
+form input.just-validate-error-field {
+  border: 1px solid red !important;
+}
+
+form input.just-validate-success-field {
+  border: 1px solid green !important;
+}

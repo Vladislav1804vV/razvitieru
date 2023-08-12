@@ -1,3 +1,5 @@
+const JustValidate = window.JustValidate
+
 function callInit() {
     const buttons = document.querySelectorAll('[data-call]')
     const indiSection = document.querySelector('section.indi')
@@ -27,8 +29,8 @@ function callInit() {
 
     setTimeout(() => {
         openPopup()
-        setTimeout(openPopup, 120_000)
-    }, 15_000)
+        setTimeout(openPopup, 120000)
+    }, 15000)
 }
 function dropListInit() {
     const dropItems = document.querySelectorAll('.objects__item')
@@ -103,9 +105,11 @@ function formInit() {
     const name = document.querySelector('[name="name"]')
     const type = document.querySelector('[name="type"]')
     const object = document.querySelector('[name="object"]')
-    // Inputmask({ mask: "999", "placeholder": "" }).mask(months)
-    // Inputmask({ mask: "9999999999", "placeholder": "" }).mask(sum)
+    Inputmask({ mask: "999",  placeholder: ""}).mask(months)
+    Inputmask({ mask: "9999999999", placeholder: ""}).mask(sum)
     // Inputmask({ mask: "+7(999) 999-99-99" }).mask(phone)
+
+
 
     const checkValue = (element, step) => {
         if (!element.value) {
@@ -148,8 +152,86 @@ function formInit() {
                 return false;
         }
     })
+
+    const rulesData = {
+        'name': [
+            {
+                rule: 'required'
+            },
+        ],
+        'phone': [
+            {
+                rule: 'required'
+            },
+            {
+                rule: 'customRegexp',
+                value: /\+7 \(\d{3}\) \d{3}-\d{2}-\d{2}/
+            }
+        ],
+        'sum': [
+            {
+                rule: 'required'
+            },
+            {
+                rule: 'integer'
+            },
+            {
+                validator: value => value >= 1
+            }
+        ],
+        'months': [
+            {
+                rule: 'required'
+            },
+            {
+                rule: 'integer'
+            },
+            {
+                validator: value => value >= 1
+            }
+        ],
+        'place': [
+            {
+                rule: 'required'
+            }
+        ]
+    }
+
+    const form1 = document.querySelector('form.use-m__form')
+    if (form1) {
+        new JustValidate(form1, {errorLabelStyle: {display: 'none'}})
+            .addField('input[name=phone]', rulesData.phone)
+            .onSuccess(() => {form1.submit()})
+    }
+
+    const form2 = document.querySelector('form.indi__right')
+    if (form2) {
+        new JustValidate(form2, {errorLabelStyle: {display: 'none'}})
+            .addField('input[name=sum]', rulesData.sum)
+            .addField('input[name=months]', rulesData.months)
+            .addField('input[name=place]', rulesData.place)
+            .addField('input[name=name]', rulesData.name)
+            .addField('input[name=phone]', rulesData.phone)
+            .onSuccess(() => {form2.submit()})
+    }
+
+    const form3 = document.querySelector('form.footer__form')
+    if (form3) {
+        new JustValidate(form3, {errorLabelStyle: {display: 'none'}})
+            .addField('input[name=name]', rulesData.name)
+            .addField('input[name=phone]', rulesData.phone)
+            .onSuccess(() => {form3.submit()})
+    }
+
+    const form4 = document.querySelector('form.popup__form')
+    if (form4) {
+        new JustValidate(form4, {errorLabelStyle: {display: 'none'}})
+            .addField('input[name=phone]', rulesData.phone)
+            .onSuccess(() => {form4.submit()})
+    }
 }
-// function phoneInit() {
+
+function phoneInit() {
 //     const input = document.querySelector(".use-m__input")
 //     Inputmask({ mask: "+7(999) 999-99-99" }).mask(input)
 
@@ -158,7 +240,13 @@ function formInit() {
 
 //     const input3 = document.querySelector(".popup__input")
 //     Inputmask({ mask: "+7(999) 999-99-99" }).mask(input3)
-// }
+
+    const inputs = document.querySelectorAll('input[name=phone]')
+    inputs.forEach((input) => {
+        Inputmask({ mask: "+7 (999) 999-99-99" }).mask(input)
+    })
+}
+
 function rangeSlidersInit() {
     const rangeBlocks = document.querySelectorAll('[data-range-block]')
     const paymentTypes = document.querySelectorAll('[data-tab-content]')
@@ -342,7 +430,7 @@ function rangeSlidersInit() {
 
     // sum credit slider
     const sumSliderHandler = () => {
-        lineSliderHandler(sumSlider, sumSliderLine, 40_000_000)
+        lineSliderHandler(sumSlider, sumSliderLine, 40000000)
         digitSliderHandler(currentSum, sumSlider.value)
         digitSliderHandler(resultSum, sumSlider.value)
         createPaymentScheduleInfo()
@@ -350,7 +438,7 @@ function rangeSlidersInit() {
 
     // sum payment slider
     const sumSliderMonthlyPayment = () => {
-        lineSliderHandler(sumSliderMonthly, sumSliderLineMonthly, 1_000_000)
+        lineSliderHandler(sumSliderMonthly, sumSliderLineMonthly, 1000000)
         digitSliderHandler(currentSumMonthly, sumSliderMonthly.value)
         digitSliderHandler(everyMonthPaymentElement, sumSliderMonthly.value)
         createPaymentScheduleInfo()
@@ -383,9 +471,9 @@ function rangeSlidersInit() {
 
     createPaymentScheduleInfo()
     
-    lineSliderHandler(sumSliderMonthly, sumSliderLineMonthly, 1_000_000)
+    lineSliderHandler(sumSliderMonthly, sumSliderLineMonthly, 1000000)
     lineSliderHandler(monthSlider, monthSliderLine, 120)
-    lineSliderHandler(sumSlider, sumSliderLine, 40_000_000)
+    lineSliderHandler(sumSlider, sumSliderLine, 40000000)
 
     // input.addEventListener('input', () => {
     //     const regExp = /[^0-9]/g
@@ -400,7 +488,7 @@ function rangeSlidersInit() {
 }
 document.addEventListener('DOMContentLoaded', () => {
     dropListInit()
-    // phoneInit()
+    phoneInit()
     formInit()
     rangeSlidersInit()
     swiperInit()
